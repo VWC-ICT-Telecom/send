@@ -23,7 +23,7 @@ class Footer extends Component {
         links.push(html`
           <li class="m-2">
             <a href="${WEB_UI.FOOTER_DONATE_URL}" target="_blank">
-              ${translate('footerLinkDonate')}
+              ${translate('')}
             </a>
           </li>
         `);
@@ -32,7 +32,7 @@ class Footer extends Component {
         links.push(html`
           <li class="m-2">
             <a href="${WEB_UI.FOOTER_CLI_URL}" target="_blank">
-              ${translate('footerLinkCli')}
+              ${translate('')}
             </a>
           </li>
         `);
@@ -41,7 +41,7 @@ class Footer extends Component {
         links.push(html`
           <li class="m-2">
             <a href="${WEB_UI.FOOTER_DMCA_URL}" target="_blank">
-              ${translate('footerLinkDmca')}
+              ${translate('')}
             </a>
           </li>
         `);
@@ -50,7 +50,7 @@ class Footer extends Component {
         links.push(html`
           <li class="m-2">
             <a href="${WEB_UI.FOOTER_SOURCE_URL}" target="_blank">
-              ${translate('footerLinkSource')}
+              ${translate('')}
             </a>
           </li>
         `);
@@ -59,7 +59,7 @@ class Footer extends Component {
       links.push(html`
         <li class="m-2">
           <a href="https://gitlab.com/timvisee/send" target="_blank">
-            ${translate('footerLinkSource')}
+            ${translate('')}
           </a>
         </li>
       `);
@@ -98,7 +98,7 @@ class Footer extends Component {
       else  {
         footer.push(html`
           <li class="m-2">
-            ${translate('footerText')}
+            ${translate('')}
           </li>
         `);
       }

@@ -6,8 +6,8 @@
   "contributors": [
     "Tim Visee <3a4fb3964f@sinenomine.email> (https://timvisee.com)"
   ],
-  "repository": "gitlab:timvisee/send",
-  "homepage": "https://gitlab.com/timvisee/send/",
+  "repository": "github:VWC-ICT-Telecom/send",
+  "homepage": "https://github.com/VWC-ICT-Telecom/send",
   "license": "MPL-2.0",
   "private": true,
   "scripts": {
