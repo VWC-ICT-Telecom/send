@@ -25,20 +25,15 @@ class Header extends Component {
         icon:
           this.state.WEB_UI.CUSTOM_ASSETS.icon !== ''
             ? this.state.WEB_UI.CUSTOM_ASSETS.icon
-            : assets.get('icon.svg'),
-        wordmark:
-          this.state.WEB_UI.CUSTOM_ASSETS.wordmark !== ''
-            ? this.state.WEB_UI.CUSTOM_ASSETS.wordmark
-            : assets.get('wordmark.svg') + '#logo'
+            : assets.get('icon.svg')
       };
+    
     const title =
       platform() === 'android'
         ? html`
             <a class="flex flex-row items-center">
               <img src="${assetMap.icon}" />
-              <svg class="w-48">
-                <use xlink:href="${assetMap.wordmark}" />
-              </svg>
+              <span class="ml-2 text-xl font-semibold" style="margin-top: -5px;">Bestanden delen</span>
             </a>
           `
         : html`
@@ -47,11 +42,10 @@ class Header extends Component {
                 alt="${this.state.translate('title')}"
                 src="${assetMap.icon}"
               />
-              <svg viewBox="66 0 340 64" class="w-48 md:w-64">
-                <use xlink:href="${assetMap.wordmark}" />
-              </svg>
+              <span class="ml-2 text-xl md:text-2xl font-semibold" style="margin-top: -5px;">Bestanden delen</span>
             </a>
           `;
+    
     return html`
       <header
         class="main-header relative flex-none flex flex-row items-center justify-between w-full px-6 md:px-8 h-16 md:h-24 z-20 bg-transparent"
