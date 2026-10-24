@@ -6,7 +6,7 @@ stages:
 # Build Send, run npm tests
 test:
   stage: test
-  image: "node:16-slim"
+  image: "node:26.12.1-slim"
   only:
     - api
     - branches
