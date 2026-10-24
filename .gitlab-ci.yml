@@ -8,6 +8,10 @@ test:
   stage: test
   image: "node:26.12.1-slim"
   timeout: 30 minutes
+  variables:
+    # Puppeteer 2 cannot unpack its bundled Chromium on Node 14+, use system Chrome
+    PUPPETEER_SKIP_CHROMIUM_DOWNLOAD: "true"
+    PUPPETEER_EXECUTABLE_PATH: /usr/bin/google-chrome-stable
   only:
     - api
     - branches

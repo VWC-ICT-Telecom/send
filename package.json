@@ -226,8 +226,5 @@
     "zgh",
     "zh-CN",
     "zh-TW"
-  ],
-  "allowScripts": {
-    "puppeteer@2.1.1": true
-  }
+  ]
 }
