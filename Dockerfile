@@ -5,7 +5,7 @@
 ##
 
 # Build project
-FROM node:16.13-alpine3.13 AS builder
+FROM node:26.12.1-alpine AS builder
 
 RUN set -x \
   # Change node uid/gid
@@ -34,7 +34,7 @@ RUN set -x \
     && npm run build
 
 # Main image
-FROM node:16.13-alpine3.13
+FROM node:26.12.1-alpine
 
 RUN set -x \
   # Change node uid/gid
@@ -62,7 +62,7 @@ COPY --chown=app:app public/locales public/locales
 COPY --chown=app:app server server
 COPY --chown=app:app --from=builder /app/dist dist
 
-RUN npm ci --production && npm cache clean --force
+RUN npm ci --omit=dev && npm cache clean --force
 RUN mkdir -p /app/.config/configstore
 RUN ln -s dist/version.json version.json
 
