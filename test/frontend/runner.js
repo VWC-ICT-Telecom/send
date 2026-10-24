@@ -23,13 +23,14 @@ function onConsole(msg) {
 
 const server = app.listen(async function() {
   let exitCode = -1;
-  const browser = await puppeteer.launch({
-    args: [
-      // puppeteer >= 1.10.0 crashes on Circle CI without this flag set
-      '--no-sandbox'
-    ]
-  });
+  let browser;
   try {
+    browser = await puppeteer.launch({
+      args: [
+        // puppeteer >= 1.10.0 crashes on Circle CI without this flag set
+        '--no-sandbox'
+      ]
+    });
     const page = await browser.newPage();
     page.on('console', onConsole);
     page.on('pageerror', console.log.bind(console));
@@ -64,7 +65,7 @@ const server = app.listen(async function() {
   } catch (e) {
     console.log(e);
   } finally {
-    browser.close();
+    if (browser) browser.close();
     server.close(() => {
       process.exit(exitCode);
     });
