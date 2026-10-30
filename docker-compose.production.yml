@@ -1,0 +1,121 @@
+# Production stack for Portainer or `docker compose`.
+# Before deploying, replace BASE_URL and pin SEND_IMAGE to a published version.
+
+services:
+  send:
+    image: ${SEND_IMAGE:-ghcr.io/vwc-ict-telecom/send:latest}
+    container_name: send
+    restart: unless-stopped
+    depends_on:
+      redis:
+        condition: service_healthy
+    ports:
+      - "1443:1443"
+    volumes:
+      - send_uploads:/uploads
+    environment:
+      # Core server settings
+      NODE_ENV: "production"
+      IP_ADDRESS: "0.0.0.0"
+      PORT: "1443"
+      BASE_URL: "https://send.example.com"
+      DETECT_BASE_URL: "false"
+      FILE_DIR: "/uploads"
+      L10N_DEV: "false"
+
+      # Upload and archive limits
+      MAX_FILE_SIZE: "2684354560"
+      MAX_FILES_PER_ARCHIVE: "64"
+      MAX_ARCHIVES_PER_USER: "16"
+      EXPIRE_TIMES_SECONDS: "300,3600,86400,604800"
+      DEFAULT_EXPIRE_SECONDS: "86400"
+      MAX_EXPIRE_SECONDS: "604800"
+      DOWNLOAD_COUNTS: "1,2,3,4,5,20,50,100"
+      DEFAULT_DOWNLOADS: "1"
+      MAX_DOWNLOADS: "100"
+
+      # Redis (the bundled Redis service uses no authentication by default)
+      REDIS_HOST: "redis"
+      REDIS_PORT: "6379"
+      REDIS_USER: ""
+      REDIS_PASSWORD: ""
+      REDIS_DB: ""
+      REDIS_EVENT_EXPIRE: "false"
+      REDIS_RETRY_TIME: "10000"
+      REDIS_RETRY_DELAY: "500"
+
+      # Optional S3-compatible storage. Leave S3_BUCKET empty to use /uploads.
+      S3_BUCKET: ""
+      S3_ENDPOINT: ""
+      S3_USE_PATH_STYLE_ENDPOINT: "false"
+      AWS_ACCESS_KEY_ID: ""
+      AWS_SECRET_ACCESS_KEY: ""
+
+      # Optional Google Cloud Storage. Leave empty to use /uploads.
+      GCS_BUCKET: ""
+
+      # Optional Sentry monitoring
+      SENTRY_CLIENT: ""
+      SENTRY_DSN: ""
+
+      # Optional Firefox Accounts integration (disabled when FXA_CLIENT_ID is empty)
+      FXA_URL: "https://send-fxa.dev.lcip.org"
+      FXA_CLIENT_ID: ""
+      FXA_KEY_SCOPE: "https://identity.mozilla.com/apps/send"
+      FXA_CSP_OAUTH_URL: ""
+      FXA_CSP_CONTENT_URL: ""
+      FXA_CSP_PROFILE_URL: ""
+      FXA_CSP_PROFILEIMAGE_URL: ""
+
+      # Branding and page metadata
+      CUSTOM_TITLE: "Bestanden delen"
+      CUSTOM_DESCRIPTION: "Encrypt and send files with a link that automatically expires to ensure your important documents don’t stay online forever."
+      UI_COLOR_PRIMARY: "#0a84ff"
+      UI_COLOR_ACCENT: "#003eaa"
+      CUSTOM_LOCALE: ""
+      UI_CUSTOM_ASSETS_ANDROID_CHROME_192PX: ""
+      UI_CUSTOM_ASSETS_ANDROID_CHROME_512PX: ""
+      UI_CUSTOM_ASSETS_APPLE_TOUCH_ICON: ""
+      UI_CUSTOM_ASSETS_FAVICON_16PX: ""
+      UI_CUSTOM_ASSETS_FAVICON_32PX: ""
+      UI_CUSTOM_ASSETS_ICON: ""
+      UI_CUSTOM_ASSETS_SAFARI_PINNED_TAB: ""
+      UI_CUSTOM_ASSETS_FACEBOOK: ""
+      UI_CUSTOM_ASSETS_TWITTER: ""
+      UI_CUSTOM_ASSETS_WORDMARK: ""
+      UI_CUSTOM_CSS: ""
+
+      # Footer, notices, and optional UI integrations
+      SURVEY_URL: ""
+      IP_DB: ""
+      SEND_FOOTER_DONATE_URL: ""
+      SEND_FOOTER_CLI_URL: "https://github.com/timvisee/ffsend"
+      SEND_FOOTER_DMCA_URL: ""
+      SEND_FOOTER_SOURCE_URL: "https://github.com/VWC-ICT-Telecom/send"
+      CUSTOM_FOOTER_TEXT: ""
+      CUSTOM_FOOTER_URL: ""
+      SEND_MAIN_NOTICE_HTML: ""
+      SEND_UPLOAD_AREA_NOTICE_HTML: ""
+      SEND_UPLOADS_LIST_NOTICE_HTML: ""
+      SEND_DOWNLOAD_NOTICE_HTML: ""
+      SHOW_THUNDERBIRD_SPONSOR: "false"
+
+  redis:
+    image: redis:7.4-alpine
+    container_name: send-redis
+    restart: unless-stopped
+    command: ["redis-server", "--appendonly", "yes"]
+    volumes:
+      - send_redis:/data
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 10s
+
+volumes:
+  send_uploads:
+    name: send_uploads
+  send_redis:
+    name: send_redis

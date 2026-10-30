@@ -52,6 +52,11 @@ RUN set -x \
         --uid 1000 \
         app
 
+# The application runs as the non-root `app` user. Creating this directory in
+# the image ensures an empty named volume mounted at /uploads inherits the
+# correct ownership on its first use.
+RUN mkdir -p /uploads && chown app:app /uploads
+
 USER app
 WORKDIR /app
 

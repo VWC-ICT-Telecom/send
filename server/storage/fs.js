@@ -31,7 +31,15 @@ class FSStorage {
         fstream.destroy(err);
       });
       fstream.on('error', err => {
-        fs.unlinkSync(filepath);
+        // A failed stream may not have created a file. Do not hide the
+        // original write error by throwing ENOENT while cleaning up.
+        try {
+          fs.unlinkSync(filepath);
+        } catch (cleanupErr) {
+          if (cleanupErr.code !== 'ENOENT') {
+            this.log.error('Unable to remove incomplete upload:', cleanupErr);
+          }
+        }
         reject(err);
       });
       fstream.on('finish', resolve);

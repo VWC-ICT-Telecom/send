@@ -89,6 +89,13 @@ Replace `https://send.example.com` with the public URL. Put HTTPS termination
 and access control in a reverse proxy in front of Send for Internet-facing
 deployments.
 
+For a full Portainer-ready stack with every server configuration value written
+out, use [`docker-compose.production.yml`](../docker-compose.production.yml).
+Set `BASE_URL` to your public URL, then deploy it as a Portainer Stack after
+adding GHCR as a private registry. Pin `SEND_IMAGE` to a release tag in the
+Stack's environment variables, for example
+`ghcr.io/vwc-ict-telecom/send:v3.5.1-custom.1`.
+
 ## Routine update checklist
 
 1. Fetch and merge the upstream changes into your fork, resolving conflicts in
